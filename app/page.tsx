@@ -1,14 +1,14 @@
-"use client"
+"use client";
 
-import type React from "react"
+import type React from "react";
 
-import { useState, useEffect, useRef } from "react"
-import Image from "next/image"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Textarea } from "@/components/ui/textarea"
-import { FloatingParticles } from "@/components/floating-particles"
+import { useState, useEffect, useRef } from "react";
+import Image from "next/image";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { FloatingParticles } from "@/components/floating-particles";
 import {
   Menu,
   X,
@@ -34,23 +34,26 @@ import {
   Heart,
   BookOpen,
   MessageCircle,
-} from "lucide-react"
+} from "lucide-react";
 
-import { useRegistration } from "@/hooks/use-registration"
-import { useContact } from "@/hooks/use-contact"
-import { Toaster } from "@/components/ui/toaster"
-import { toast } from "@/components/ui/use-toast"
-import { AdminAccess } from "@/components/admin-access"
+import { useRegistration } from "@/hooks/use-registration";
+import { useContact } from "@/hooks/use-contact";
+import { Toaster } from "@/components/ui/toaster";
+import { toast } from "@/components/ui/use-toast";
+import { AdminAccess } from "@/components/admin-access";
 
 export default function CloudsDewLanding() {
-  const [isMenuOpen, setIsMenuOpen] = useState(false)
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 })
-  const [cardsVisible, setCardsVisible] = useState(false)
-  const [selectedProgram, setSelectedProgram] = useState<string | null>("mentorship")
-  const cardsRef = useRef<HTMLDivElement>(null)
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  const [cardsVisible, setCardsVisible] = useState(false);
+  const [selectedProgram, setSelectedProgram] = useState<string | null>(
+    "mentorship"
+  );
+  const cardsRef = useRef<HTMLDivElement>(null);
 
-  const { submitRegistration, isLoading: isRegistrationLoading } = useRegistration()
-  const { submitContact, isLoading: isContactLoading } = useContact()
+  const { submitRegistration, isLoading: isRegistrationLoading } =
+    useRegistration();
+  const { submitContact, isLoading: isContactLoading } = useContact();
 
   const [formData, setFormData] = useState({
     firstName: "",
@@ -63,29 +66,29 @@ export default function CloudsDewLanding() {
     schedulePreference: "" as "weekdays" | "evenings" | "weekends" | "flexible",
     goalsExpectations: "",
     termsAccepted: false,
-  })
+  });
 
   const handleInputChange = (field: string, value: string | boolean) => {
-    setFormData((prev) => ({ ...prev, [field]: value }))
-  }
+    setFormData((prev) => ({ ...prev, [field]: value }));
+  };
 
   const handleRegistrationSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
+    e.preventDefault();
 
     if (!formData.termsAccepted) {
       toast({
         title: "Terms Required",
         description: "Please accept the terms and conditions",
         variant: "destructive",
-      })
-      return
+      });
+      return;
     }
 
     const result = await submitRegistration({
       ...formData,
       programType: selectedProgram as "mentorship" | "bootcamp",
       experienceLevel: formData.experienceLevel || "beginner",
-    })
+    });
 
     if (result.success) {
       // Reset form
@@ -97,60 +100,64 @@ export default function CloudsDewLanding() {
         currentRole: "",
         experienceLevel: "" as "beginner" | "intermediate" | "advanced",
         areasOfInterest: "",
-        schedulePreference: "" as "weekdays" | "evenings" | "weekends" | "flexible",
+        schedulePreference: "" as
+          | "weekdays"
+          | "evenings"
+          | "weekends"
+          | "flexible",
         goalsExpectations: "",
         termsAccepted: false,
-      })
-      setSelectedProgram(null)
+      });
+      setSelectedProgram(null);
     }
-  }
+  };
 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
-      setMousePosition({ x: e.clientX, y: e.clientY })
-    }
+      setMousePosition({ x: e.clientX, y: e.clientY });
+    };
 
-    window.addEventListener("mousemove", handleMouseMove)
-    return () => window.removeEventListener("mousemove", handleMouseMove)
-  }, [])
+    window.addEventListener("mousemove", handleMouseMove);
+    return () => window.removeEventListener("mousemove", handleMouseMove);
+  }, []);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            setCardsVisible(true)
+            setCardsVisible(true);
           }
-        })
+        });
       },
       {
         threshold: 0.3,
         rootMargin: "0px 0px -100px 0px",
-      },
-    )
+      }
+    );
 
     if (cardsRef.current) {
-      observer.observe(cardsRef.current)
+      observer.observe(cardsRef.current);
     }
 
     return () => {
       if (cardsRef.current) {
-        observer.unobserve(cardsRef.current)
+        observer.unobserve(cardsRef.current);
       }
-    }
-  }, [])
+    };
+  }, []);
 
   const scrollToSection = (sectionId: string) => {
-    const element = document.getElementById(sectionId)
+    const element = document.getElementById(sectionId);
     if (element) {
-      element.scrollIntoView({ behavior: "smooth" })
+      element.scrollIntoView({ behavior: "smooth" });
     }
-    setIsMenuOpen(false)
-  }
+    setIsMenuOpen(false);
+  };
 
   const handleProgramSelect = (program: string) => {
-    setSelectedProgram(program)
-  }
+    setSelectedProgram(program);
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-950 via-blue-950 to-emerald-950 relative overflow-hidden">
@@ -168,14 +175,18 @@ export default function CloudsDewLanding() {
             <div
               className="absolute w-96 h-96 rounded-full bg-gradient-to-r from-cyan-500/20 to-blue-500/20 blur-3xl"
               style={{
-                transform: `translate(${mousePosition.x * 0.02}px, ${mousePosition.y * 0.02}px)`,
+                transform: `translate(${mousePosition.x * 0.02}px, ${
+                  mousePosition.y * 0.02
+                }px)`,
                 transition: "transform 0.1s ease-out",
               }}
             />
             <div
               className="absolute top-1/2 right-0 w-96 h-96 rounded-full bg-gradient-to-l from-green-500/20 to-teal-500/20 blur-3xl"
               style={{
-                transform: `translate(${mousePosition.x * -0.01}px, ${mousePosition.y * -0.01}px)`,
+                transform: `translate(${mousePosition.x * -0.01}px, ${
+                  mousePosition.y * -0.01
+                }px)`,
                 transition: "transform 0.1s ease-out",
               }}
             />
@@ -200,11 +211,23 @@ export default function CloudsDewLanding() {
                 style={{ animationDelay: "1s" }}
               />
               <defs>
-                <linearGradient id="gradient1" x1="0%" y1="0%" x2="100%" y2="0%">
+                <linearGradient
+                  id="gradient1"
+                  x1="0%"
+                  y1="0%"
+                  x2="100%"
+                  y2="0%"
+                >
                   <stop offset="0%" stopColor="#06b6d4" />
                   <stop offset="100%" stopColor="#10b981" />
                 </linearGradient>
-                <linearGradient id="gradient2" x1="0%" y1="0%" x2="100%" y2="0%">
+                <linearGradient
+                  id="gradient2"
+                  x1="0%"
+                  y1="0%"
+                  x2="100%"
+                  y2="0%"
+                >
                   <stop offset="0%" stopColor="#10b981" />
                   <stop offset="100%" stopColor="#06b6d4" />
                 </linearGradient>
@@ -262,7 +285,10 @@ export default function CloudsDewLanding() {
               </Button>
             </div>
 
-            <button className="md:hidden text-white" onClick={() => setIsMenuOpen(!isMenuOpen)}>
+            <button
+              className="md:hidden text-white"
+              onClick={() => setIsMenuOpen(!isMenuOpen)}
+            >
               {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
             </button>
           </header>
@@ -312,7 +338,9 @@ export default function CloudsDewLanding() {
               {/* Premium Badge */}
               <div className="inline-flex items-center space-x-2 bg-gray-900/50 border border-green-500/30 rounded-full px-6 py-3 mb-8">
                 <Star className="w-5 h-5 text-green-400" />
-                <span className="text-green-400 font-medium">Premium Cloud Technology Training</span>
+                <span className="text-green-400 font-medium">
+                  Premium Cloud Technology Training
+                </span>
                 <Star className="w-5 h-5 text-green-400" />
               </div>
 
@@ -326,23 +354,29 @@ export default function CloudsDewLanding() {
                 </h1>
 
                 <p className="text-xl lg:text-2xl text-gray-300 leading-relaxed mb-12 max-w-4xl mx-auto">
-                  Gain in-demand skills through expert-led training designed to elevate your impact and drive
-                  technological innovation.
+                  Gain in-demand skills through expert-led training designed to
+                  elevate your impact and drive technological innovation.
                 </p>
 
                 {/* Technology Badges */}
                 <div className="flex flex-wrap justify-center gap-4 mb-12">
                   <div className="inline-flex items-center space-x-2 bg-green-500/20 border border-green-500/30 rounded-full px-6 py-3">
                     <Cloud className="w-5 h-5 text-green-400" />
-                    <span className="text-green-400 font-medium">MultiCloud Mastery</span>
+                    <span className="text-green-400 font-medium">
+                      MultiCloud Mastery
+                    </span>
                   </div>
                   <div className="inline-flex items-center space-x-2 bg-blue-500/20 border border-blue-500/30 rounded-full px-6 py-3">
                     <Code className="w-5 h-5 text-blue-400" />
-                    <span className="text-blue-400 font-medium">DevOps Excellence</span>
+                    <span className="text-blue-400 font-medium">
+                      DevOps Excellence
+                    </span>
                   </div>
                   <div className="inline-flex items-center space-x-2 bg-purple-500/20 border border-purple-500/30 rounded-full px-6 py-3">
                     <Zap className="w-5 h-5 text-purple-400" />
-                    <span className="text-purple-400 font-medium">AI Innovation</span>
+                    <span className="text-purple-400 font-medium">
+                      AI Innovation
+                    </span>
                   </div>
                 </div>
 
@@ -644,7 +678,9 @@ export default function CloudsDewLanding() {
             {/* Excellence Badge */}
             <div className="inline-flex items-center space-x-2 bg-gray-900/50 border border-green-500/30 rounded-full px-6 py-3 mb-8">
               <Star className="w-5 h-5 text-green-400" />
-              <span className="text-green-400 font-medium">World-Class Excellence</span>
+              <span className="text-green-400 font-medium">
+                World-Class Excellence
+              </span>
             </div>
 
             <h2 className="text-3xl lg:text-5xl font-bold mb-8">
@@ -656,8 +692,9 @@ export default function CloudsDewLanding() {
             </h2>
 
             <p className="text-xl text-gray-300 leading-relaxed mb-16 max-w-4xl mx-auto">
-              We're not just another training company. We're fresh innovators passionate about transformation, committed
-              to bridging the gap between where you are and where you want to be.
+              We're not just another training company. We're fresh innovators
+              passionate about transformation, committed to bridging the gap
+              between where you are and where you want to be.
             </p>
 
             {/* Statistics Grid */}
@@ -667,7 +704,9 @@ export default function CloudsDewLanding() {
                   <div className="w-16 h-16 bg-green-500/20 rounded-2xl flex items-center justify-center mx-auto mb-6">
                     <Clock className="w-8 h-8 text-green-400" />
                   </div>
-                  <h3 className="text-3xl lg:text-4xl font-bold mb-2 text-white">100+</h3>
+                  <h3 className="text-3xl lg:text-4xl font-bold mb-2 text-white">
+                    100+
+                  </h3>
                   <p className="text-gray-300 font-medium">Hours of Content</p>
                 </CardContent>
               </Card>
@@ -677,7 +716,9 @@ export default function CloudsDewLanding() {
                   <div className="w-16 h-16 bg-blue-500/20 rounded-2xl flex items-center justify-center mx-auto mb-6">
                     <Heart className="w-8 h-8 text-blue-400" />
                   </div>
-                  <h3 className="text-3xl lg:text-4xl font-bold mb-2 text-white">24/7</h3>
+                  <h3 className="text-3xl lg:text-4xl font-bold mb-2 text-white">
+                    24/7
+                  </h3>
                   <p className="text-gray-300 font-medium">Passion Projects</p>
                 </CardContent>
               </Card>
@@ -687,7 +728,9 @@ export default function CloudsDewLanding() {
                   <div className="w-16 h-16 bg-purple-500/20 rounded-2xl flex items-center justify-center mx-auto mb-6">
                     <BookOpen className="w-8 h-8 text-purple-400" />
                   </div>
-                  <h3 className="text-3xl lg:text-4xl font-bold mb-2 text-white">12+</h3>
+                  <h3 className="text-3xl lg:text-4xl font-bold mb-2 text-white">
+                    12+
+                  </h3>
                   <p className="text-gray-300 font-medium">Learning Paths</p>
                 </CardContent>
               </Card>
@@ -697,7 +740,9 @@ export default function CloudsDewLanding() {
                   <div className="w-16 h-16 bg-pink-500/20 rounded-2xl flex items-center justify-center mx-auto mb-6">
                     <MessageCircle className="w-8 h-8 text-pink-400" />
                   </div>
-                  <h3 className="text-3xl lg:text-4xl font-bold mb-2 text-white">&lt;2h</h3>
+                  <h3 className="text-3xl lg:text-4xl font-bold mb-2 text-white">
+                    &lt;2h
+                  </h3>
                   <p className="text-gray-300 font-medium">Response Time</p>
                 </CardContent>
               </Card>
@@ -715,20 +760,25 @@ export default function CloudsDewLanding() {
                   <div className="w-8 h-8 bg-green-500/20 rounded-full flex items-center justify-center">
                     <Star className="w-5 h-5 text-green-400" />
                   </div>
-                  <h2 className="text-3xl lg:text-4xl font-bold text-white">Our Mission</h2>
+                  <h2 className="text-3xl lg:text-4xl font-bold text-white">
+                    Our Mission
+                  </h2>
                 </div>
 
                 <div className="space-y-6">
                   <p className="text-gray-300 text-lg leading-relaxed">
-                    CloudsDew is an innovative tech company committed to training IT and non-IT professionals on how to
-                    leverage MultiCloud (AWS, Azure, GCP, OCI), DevOps, and AI technologies to grow their personal
-                    brand, career, and drive innovative solutions to business.
+                    CloudsDew is an innovative tech company committed to
+                    training IT and non-IT professionals on how to leverage
+                    MultiCloud (AWS, Azure, GCP, OCI), DevOps, and AI
+                    technologies to grow their personal brand, career, and drive
+                    innovative solutions to business.
                   </p>
 
                   <p className="text-gray-300 text-lg leading-relaxed">
-                    We specialize in bridging the development and operations gap through hands-on training covering the
-                    complete DevOps lifecycle. From continuous integration and deployment to infrastructure automation
-                    and monitoring.
+                    We specialize in bridging the development and operations gap
+                    through hands-on training covering the complete DevOps
+                    lifecycle. From continuous integration and deployment to
+                    infrastructure automation and monitoring.
                   </p>
                 </div>
 
@@ -738,12 +788,15 @@ export default function CloudsDewLanding() {
                     <div className="w-6 h-6 bg-green-500/20 rounded-full flex items-center justify-center">
                       <Star className="w-4 h-4 text-green-400" />
                     </div>
-                    <h3 className="text-xl font-bold text-green-400">What Makes Us Unique</h3>
+                    <h3 className="text-xl font-bold text-green-400">
+                      What Makes Us Unique
+                    </h3>
                   </div>
                   <p className="text-gray-300 leading-relaxed">
-                    We are unique in our fresh perspective, innovative curriculum, and personalized approach. Our
-                    training helps professionals create seamless software delivery pipelines that drive business agility
-                    and innovation.
+                    We are unique in our fresh perspective, innovative
+                    curriculum, and personalized approach. Our training helps
+                    professionals create seamless software delivery pipelines
+                    that drive business agility and innovation.
                   </p>
                 </div>
               </div>
@@ -754,7 +807,9 @@ export default function CloudsDewLanding() {
                   <div className="w-8 h-8 bg-green-500/20 rounded-full flex items-center justify-center">
                     <Rocket className="w-5 h-5 text-green-400" />
                   </div>
-                  <h2 className="text-3xl lg:text-4xl font-bold text-white">Our Expertise</h2>
+                  <h2 className="text-3xl lg:text-4xl font-bold text-white">
+                    Our Expertise
+                  </h2>
                 </div>
 
                 <div className="space-y-4">
@@ -762,35 +817,45 @@ export default function CloudsDewLanding() {
                     <div className="w-12 h-12 bg-green-500 rounded-xl flex items-center justify-center">
                       <Globe className="w-6 h-6 text-white" />
                     </div>
-                    <span className="text-lg font-medium text-white">MultiCloud Architecture & Migration</span>
+                    <span className="text-lg font-medium text-white">
+                      MultiCloud Architecture & Migration
+                    </span>
                   </div>
 
                   <div className="flex items-center space-x-4 p-4 bg-gray-900/30 rounded-lg border border-gray-700/50 hover:border-green-500/30 transition-colors">
                     <div className="w-12 h-12 bg-green-500 rounded-xl flex items-center justify-center">
                       <Rocket className="w-6 h-6 text-white" />
                     </div>
-                    <span className="text-lg font-medium text-white">Complete DevOps Lifecycle</span>
+                    <span className="text-lg font-medium text-white">
+                      Complete DevOps Lifecycle
+                    </span>
                   </div>
 
                   <div className="flex items-center space-x-4 p-4 bg-gray-900/30 rounded-lg border border-gray-700/50 hover:border-blue-500/30 transition-colors">
                     <div className="w-12 h-12 bg-blue-500 rounded-xl flex items-center justify-center">
                       <Zap className="w-6 h-6 text-white" />
                     </div>
-                    <span className="text-lg font-medium text-white">AI Technology Integration</span>
+                    <span className="text-lg font-medium text-white">
+                      AI Technology Integration
+                    </span>
                   </div>
 
                   <div className="flex items-center space-x-4 p-4 bg-gray-900/30 rounded-lg border border-gray-700/50 hover:border-purple-500/30 transition-colors">
                     <div className="w-12 h-12 bg-purple-500 rounded-xl flex items-center justify-center">
                       <Shield className="w-6 h-6 text-white" />
                     </div>
-                    <span className="text-lg font-medium text-white">Infrastructure as Code (IaC)</span>
+                    <span className="text-lg font-medium text-white">
+                      Infrastructure as Code (IaC)
+                    </span>
                   </div>
 
                   <div className="flex items-center space-x-4 p-4 bg-gray-900/30 rounded-lg border border-gray-700/50 hover:border-pink-500/30 transition-colors">
                     <div className="w-12 h-12 bg-pink-500 rounded-xl flex items-center justify-center">
                       <Target className="w-6 h-6 text-white" />
                     </div>
-                    <span className="text-lg font-medium text-white">CI/CD Pipeline Optimization</span>
+                    <span className="text-lg font-medium text-white">
+                      CI/CD Pipeline Optimization
+                    </span>
                   </div>
                 </div>
               </div>
@@ -799,13 +864,19 @@ export default function CloudsDewLanding() {
         </section>
 
         {/* Section 4: Our Excellence */}
-        <section id="services" className="relative py-24 px-6 lg:px-12" ref={cardsRef}>
+        <section
+          id="services"
+          className="relative py-24 px-6 lg:px-12"
+          ref={cardsRef}
+        >
           <div className="max-w-7xl mx-auto">
             <div className="text-center mb-16">
               {/* Premium Services Badge */}
               <div className="inline-flex items-center space-x-2 bg-gray-900/50 border border-green-500/30 rounded-full px-6 py-3 mb-8">
                 <Star className="w-5 h-5 text-green-400" />
-                <span className="text-green-400 font-medium">Premium Services</span>
+                <span className="text-green-400 font-medium">
+                  Premium Services
+                </span>
               </div>
 
               <h2 className="text-3xl lg:text-5xl font-bold mb-6">
@@ -815,14 +886,17 @@ export default function CloudsDewLanding() {
                 </span>
               </h2>
               <p className="text-gray-300 text-lg max-w-4xl mx-auto leading-relaxed">
-                Comprehensive solutions to transform your career and drive business innovation through cutting-edge
-                technology and world-class expert guidance.
+                Comprehensive solutions to transform your career and drive
+                business innovation through cutting-edge technology and
+                world-class expert guidance.
               </p>
             </div>
 
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
               <Card
-                className={`border-gray-700 hover:border-green-500/50 transition-all duration-300 bg-transparent card-animate ${cardsVisible ? "visible" : ""}`}
+                className={`border-gray-700 hover:border-green-500/50 transition-all duration-300 bg-transparent card-animate ${
+                  cardsVisible ? "visible" : ""
+                }`}
               >
                 <CardContent className="p-6">
                   <div className="flex justify-between items-start mb-4">
@@ -833,15 +907,20 @@ export default function CloudsDewLanding() {
                       Premium
                     </span>
                   </div>
-                  <h3 className="text-xl font-bold mb-3 text-white">1-to-1 Mentorship</h3>
+                  <h3 className="text-xl font-bold mb-3 text-white">
+                    1-to-1 Mentorship
+                  </h3>
                   <p className="text-gray-300">
-                    Personalized guidance from industry experts to accelerate your career growth with premium support.
+                    Personalized guidance from industry experts to accelerate
+                    your career growth with premium support.
                   </p>
                 </CardContent>
               </Card>
 
               <Card
-                className={`border-gray-700 hover:border-blue-500/50 transition-all duration-300 bg-transparent card-animate ${cardsVisible ? "visible" : ""}`}
+                className={`border-gray-700 hover:border-blue-500/50 transition-all duration-300 bg-transparent card-animate ${
+                  cardsVisible ? "visible" : ""
+                }`}
               >
                 <CardContent className="p-6">
                   <div className="flex justify-between items-start mb-4">
@@ -852,15 +931,20 @@ export default function CloudsDewLanding() {
                       Intensive
                     </span>
                   </div>
-                  <h3 className="text-xl font-bold mb-3 text-white">Elite Bootcamps</h3>
+                  <h3 className="text-xl font-bold mb-3 text-white">
+                    Elite Bootcamps
+                  </h3>
                   <p className="text-gray-300">
-                    Intensive training programs designed to fast-track your skills in weeks with hands-on projects.
+                    Intensive training programs designed to fast-track your
+                    skills in weeks with hands-on projects.
                   </p>
                 </CardContent>
               </Card>
 
               <Card
-                className={`border-gray-700 hover:border-purple-500/50 transition-all duration-300 bg-transparent card-animate ${cardsVisible ? "visible" : ""}`}
+                className={`border-gray-700 hover:border-purple-500/50 transition-all duration-300 bg-transparent card-animate ${
+                  cardsVisible ? "visible" : ""
+                }`}
               >
                 <CardContent className="p-6">
                   <div className="flex justify-between items-start mb-4">
@@ -871,15 +955,20 @@ export default function CloudsDewLanding() {
                       MultiCloud
                     </span>
                   </div>
-                  <h3 className="text-xl font-bold mb-3 text-white">Cloud Migration</h3>
+                  <h3 className="text-xl font-bold mb-3 text-white">
+                    Cloud Migration
+                  </h3>
                   <p className="text-gray-300">
-                    Seamlessly transition your infrastructure to AWS, Azure, GCP or OCI with zero downtime.
+                    Seamlessly transition your infrastructure to AWS, Azure, GCP
+                    or OCI with zero downtime.
                   </p>
                 </CardContent>
               </Card>
 
               <Card
-                className={`border-gray-700 hover:border-pink-500/50 transition-all duration-300 bg-transparent card-animate ${cardsVisible ? "visible" : ""}`}
+                className={`border-gray-700 hover:border-pink-500/50 transition-all duration-300 bg-transparent card-animate ${
+                  cardsVisible ? "visible" : ""
+                }`}
               >
                 <CardContent className="p-6">
                   <div className="flex justify-between items-start mb-4">
@@ -890,15 +979,20 @@ export default function CloudsDewLanding() {
                       AI-Powered
                     </span>
                   </div>
-                  <h3 className="text-xl font-bold mb-3 text-white">Automation Excellence</h3>
+                  <h3 className="text-xl font-bold mb-3 text-white">
+                    Automation Excellence
+                  </h3>
                   <p className="text-gray-300">
-                    Streamline your operations with intelligent automation solutions and cutting-edge tools.
+                    Streamline your operations with intelligent automation
+                    solutions and cutting-edge tools.
                   </p>
                 </CardContent>
               </Card>
 
               <Card
-                className={`border-gray-700 hover:border-red-500/50 transition-all duration-300 bg-transparent card-animate ${cardsVisible ? "visible" : ""}`}
+                className={`border-gray-700 hover:border-red-500/50 transition-all duration-300 bg-transparent card-animate ${
+                  cardsVisible ? "visible" : ""
+                }`}
               >
                 <CardContent className="p-6">
                   <div className="flex justify-between items-start mb-4">
@@ -909,15 +1003,20 @@ export default function CloudsDewLanding() {
                       Enterprise
                     </span>
                   </div>
-                  <h3 className="text-xl font-bold mb-3 text-white">Security & DevSecOps</h3>
+                  <h3 className="text-xl font-bold mb-3 text-white">
+                    Security & DevSecOps
+                  </h3>
                   <p className="text-gray-300">
-                    Implement robust security practices and DevSecOps integration for enterprise-grade protection.
+                    Implement robust security practices and DevSecOps
+                    integration for enterprise-grade protection.
                   </p>
                 </CardContent>
               </Card>
 
               <Card
-                className={`border-gray-700 hover:border-orange-500/50 transition-all duration-300 bg-transparent card-animate ${cardsVisible ? "visible" : ""}`}
+                className={`border-gray-700 hover:border-orange-500/50 transition-all duration-300 bg-transparent card-animate ${
+                  cardsVisible ? "visible" : ""
+                }`}
               >
                 <CardContent className="p-6">
                   <div className="flex justify-between items-start mb-4">
@@ -928,15 +1027,20 @@ export default function CloudsDewLanding() {
                       Scalable
                     </span>
                   </div>
-                  <h3 className="text-xl font-bold mb-3 text-white">Deployment Strategies</h3>
+                  <h3 className="text-xl font-bold mb-3 text-white">
+                    Deployment Strategies
+                  </h3>
                   <p className="text-gray-300">
-                    Expert deployment strategies for scalable and reliable applications with monitoring.
+                    Expert deployment strategies for scalable and reliable
+                    applications with monitoring.
                   </p>
                 </CardContent>
               </Card>
 
               <Card
-                className={`border-gray-700 hover:border-yellow-500/50 transition-all duration-300 bg-transparent card-animate ${cardsVisible ? "visible" : ""}`}
+                className={`border-gray-700 hover:border-yellow-500/50 transition-all duration-300 bg-transparent card-animate ${
+                  cardsVisible ? "visible" : ""
+                }`}
               >
                 <CardContent className="p-6">
                   <div className="flex justify-between items-start mb-4">
@@ -947,15 +1051,20 @@ export default function CloudsDewLanding() {
                       Modern
                     </span>
                   </div>
-                  <h3 className="text-xl font-bold mb-3 text-white">Infrastructure as Code</h3>
+                  <h3 className="text-xl font-bold mb-3 text-white">
+                    Infrastructure as Code
+                  </h3>
                   <p className="text-gray-300">
-                    Build and manage infrastructure programmatically with best practices and version control.
+                    Build and manage infrastructure programmatically with best
+                    practices and version control.
                   </p>
                 </CardContent>
               </Card>
 
               <Card
-                className={`border-gray-700 hover:border-teal-500/50 transition-all duration-300 bg-transparent card-animate ${cardsVisible ? "visible" : ""}`}
+                className={`border-gray-700 hover:border-teal-500/50 transition-all duration-300 bg-transparent card-animate ${
+                  cardsVisible ? "visible" : ""
+                }`}
               >
                 <CardContent className="p-6">
                   <div className="flex justify-between items-start mb-4">
@@ -966,15 +1075,20 @@ export default function CloudsDewLanding() {
                       Consistent
                     </span>
                   </div>
-                  <h3 className="text-xl font-bold mb-3 text-white">Configuration Management</h3>
+                  <h3 className="text-xl font-bold mb-3 text-white">
+                    Configuration Management
+                  </h3>
                   <p className="text-gray-300">
-                    Maintain consistent environments across your entire infrastructure with automation.
+                    Maintain consistent environments across your entire
+                    infrastructure with automation.
                   </p>
                 </CardContent>
               </Card>
 
               <Card
-                className={`border-gray-700 hover:border-green-500/50 transition-all duration-300 bg-transparent card-animate ${cardsVisible ? "visible" : ""}`}
+                className={`border-gray-700 hover:border-green-500/50 transition-all duration-300 bg-transparent card-animate ${
+                  cardsVisible ? "visible" : ""
+                }`}
               >
                 <CardContent className="p-6">
                   <div className="flex justify-between items-start mb-4">
@@ -985,9 +1099,12 @@ export default function CloudsDewLanding() {
                       Optimized
                     </span>
                   </div>
-                  <h3 className="text-xl font-bold mb-3 text-white">CI/CD Pipeline Design</h3>
+                  <h3 className="text-xl font-bold mb-3 text-white">
+                    CI/CD Pipeline Design
+                  </h3>
                   <p className="text-gray-300">
-                    Design and optimize continuous integration and deployment pipelines for maximum efficiency.
+                    Design and optimize continuous integration and deployment
+                    pipelines for maximum efficiency.
                   </p>
                 </CardContent>
               </Card>
@@ -1001,13 +1118,16 @@ export default function CloudsDewLanding() {
             <div className="bg-gray-900/50 border border-green-500/20 rounded-3xl p-12 lg:p-16">
               <div className="flex items-center justify-center space-x-2 mb-8">
                 <Star className="w-6 h-6 text-green-400" />
-                <h2 className="text-3xl lg:text-4xl font-bold text-white">Ready for Transformation?</h2>
+                <h2 className="text-3xl lg:text-4xl font-bold text-white">
+                  Ready for Transformation?
+                </h2>
                 <Star className="w-6 h-6 text-green-400" />
               </div>
 
               <p className="text-xl text-gray-300 leading-relaxed mb-12 max-w-3xl mx-auto">
-                Ready to transform your career or business with our expert guidance? Let's discuss how we can help you
-                achieve your goals and reach new heights.
+                Ready to transform your career or business with our expert
+                guidance? Let's discuss how we can help you achieve your goals
+                and reach new heights.
               </p>
 
               <Button
@@ -1032,8 +1152,8 @@ export default function CloudsDewLanding() {
                 </span>
               </h2>
               <p className="text-xl text-gray-300 leading-relaxed max-w-4xl mx-auto">
-                Choose your path to success. Select a program below to begin your transformation journey with CloudsDew
-                Tech.
+                Choose your path to success. Select a program below to begin
+                your transformation journey with CloudsDew Tech.
               </p>
             </div>
 
@@ -1050,7 +1170,9 @@ export default function CloudsDewLanding() {
               >
                 <User className="mr-2" size={20} />
                 1-to-1 Mentorship
-                {selectedProgram === "mentorship" && <ChevronDown className="ml-2" size={16} />}
+                {selectedProgram === "mentorship" && (
+                  <ChevronDown className="ml-2" size={16} />
+                )}
               </Button>
 
               <Button
@@ -1064,7 +1186,9 @@ export default function CloudsDewLanding() {
               >
                 <Award className="mr-2" size={20} />
                 Bootcamp
-                {selectedProgram === "bootcamp" && <ChevronDown className="ml-2" size={16} />}
+                {selectedProgram === "bootcamp" && (
+                  <ChevronDown className="ml-2" size={16} />
+                )}
               </Button>
             </div>
 
@@ -1077,7 +1201,10 @@ export default function CloudsDewLanding() {
                 >
                   <div className="text-center mb-6">
                     <h3 className="text-2xl font-bold text-white mb-2">
-                      {selectedProgram === "mentorship" ? "1-to-1 Mentorship" : "Bootcamp"} Registration
+                      {selectedProgram === "mentorship"
+                        ? "1-to-1 Mentorship"
+                        : "Bootcamp"}{" "}
+                      Registration
                     </h3>
                     <p className="text-gray-300">
                       {selectedProgram === "mentorship"
@@ -1088,21 +1215,29 @@ export default function CloudsDewLanding() {
 
                   <div className="grid md:grid-cols-2 gap-4">
                     <div>
-                      <label className="block text-sm font-medium text-gray-300 mb-2">First Name *</label>
+                      <label className="block text-sm font-medium text-gray-300 mb-2">
+                        First Name *
+                      </label>
                       <Input
                         placeholder="John"
                         value={formData.firstName}
-                        onChange={(e) => handleInputChange("firstName", e.target.value)}
+                        onChange={(e) =>
+                          handleInputChange("firstName", e.target.value)
+                        }
                         className="bg-gray-800/50 border-gray-600 text-white placeholder-gray-400 focus:border-green-500"
                         required
                       />
                     </div>
                     <div>
-                      <label className="block text-sm font-medium text-gray-300 mb-2">Last Name *</label>
+                      <label className="block text-sm font-medium text-gray-300 mb-2">
+                        Last Name *
+                      </label>
                       <Input
                         placeholder="Doe"
                         value={formData.lastName}
-                        onChange={(e) => handleInputChange("lastName", e.target.value)}
+                        onChange={(e) =>
+                          handleInputChange("lastName", e.target.value)
+                        }
                         className="bg-gray-800/50 border-gray-600 text-white placeholder-gray-400 focus:border-green-500"
                         required
                       />
@@ -1110,12 +1245,16 @@ export default function CloudsDewLanding() {
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-2">Email Address *</label>
+                    <label className="block text-sm font-medium text-gray-300 mb-2">
+                      Email Address *
+                    </label>
                     <Input
                       type="email"
                       placeholder="john.doe@example.com"
                       value={formData.email}
-                      onChange={(e) => handleInputChange("email", e.target.value)}
+                      onChange={(e) =>
+                        handleInputChange("email", e.target.value)
+                      }
                       className="bg-gray-800/50 border-gray-600 text-white placeholder-gray-400 focus:border-green-500"
                       required
                     />
@@ -1123,72 +1262,107 @@ export default function CloudsDewLanding() {
 
                   <div className="grid md:grid-cols-2 gap-4">
                     <div>
-                      <label className="block text-sm font-medium text-gray-300 mb-2">Phone Number *</label>
+                      <label className="block text-sm font-medium text-gray-300 mb-2">
+                        Phone Number *
+                      </label>
                       <Input
                         placeholder="+1 (555) 123-4567"
                         value={formData.phone}
-                        onChange={(e) => handleInputChange("phone", e.target.value)}
+                        onChange={(e) =>
+                          handleInputChange("phone", e.target.value)
+                        }
                         className="bg-gray-800/50 border-gray-600 text-white placeholder-gray-400 focus:border-green-500"
                         required
                       />
                     </div>
                     <div>
-                      <label className="block text-sm font-medium text-gray-300 mb-2">Current Role</label>
+                      <label className="block text-sm font-medium text-gray-300 mb-2">
+                        Current Role
+                      </label>
                       <Input
                         placeholder="Software Developer"
                         value={formData.currentRole}
-                        onChange={(e) => handleInputChange("currentRole", e.target.value)}
+                        onChange={(e) =>
+                          handleInputChange("currentRole", e.target.value)
+                        }
                         className="bg-gray-800/50 border-gray-600 text-white placeholder-gray-400 focus:border-green-500"
                       />
                     </div>
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-2">Experience Level *</label>
+                    <label className="block text-sm font-medium text-gray-300 mb-2">
+                      Experience Level *
+                    </label>
                     <select
                       className="w-full bg-gray-800/50 border border-gray-600 text-white rounded-lg px-3 py-2 focus:border-green-500 focus:outline-none"
                       value={formData.experienceLevel}
-                      onChange={(e) => handleInputChange("experienceLevel", e.target.value)}
+                      onChange={(e) =>
+                        handleInputChange("experienceLevel", e.target.value)
+                      }
                       required
                     >
                       <option value="">Select your experience level</option>
                       <option value="beginner">Beginner (0-2 years)</option>
-                      <option value="intermediate">Intermediate (2-5 years)</option>
+                      <option value="intermediate">
+                        Intermediate (2-5 years)
+                      </option>
                       <option value="advanced">Advanced (5+ years)</option>
                     </select>
                   </div>
 
                   {selectedProgram === "mentorship" && (
                     <div>
-                      <label className="block text-sm font-medium text-gray-300 mb-2">Areas of Interest</label>
+                      <label className="block text-sm font-medium text-gray-300 mb-2">
+                        Areas of Interest
+                      </label>
                       <select
                         className="w-full bg-gray-800/50 border border-gray-600 text-white rounded-lg px-3 py-2 focus:border-green-500 focus:outline-none"
                         value={formData.areasOfInterest}
-                        onChange={(e) => handleInputChange("areasOfInterest", e.target.value)}
+                        onChange={(e) =>
+                          handleInputChange("areasOfInterest", e.target.value)
+                        }
                       >
                         <option value="">Select your focus area</option>
-                        <option value="AWS Cloud Architecture">AWS Cloud Architecture</option>
+                        <option value="AWS Cloud Architecture">
+                          AWS Cloud Architecture
+                        </option>
                         <option value="Azure DevOps">Azure DevOps</option>
-                        <option value="Google Cloud Platform">Google Cloud Platform</option>
-                        <option value="Kubernetes & Containers">Kubernetes & Containers</option>
+                        <option value="Google Cloud Platform">
+                          Google Cloud Platform
+                        </option>
+                        <option value="Kubernetes & Containers">
+                          Kubernetes & Containers
+                        </option>
                         <option value="CI/CD Pipelines">CI/CD Pipelines</option>
-                        <option value="Infrastructure as Code">Infrastructure as Code</option>
+                        <option value="Infrastructure as Code">
+                          Infrastructure as Code
+                        </option>
                       </select>
                     </div>
                   )}
 
                   {selectedProgram === "bootcamp" && (
                     <div>
-                      <label className="block text-sm font-medium text-gray-300 mb-2">Preferred Schedule</label>
+                      <label className="block text-sm font-medium text-gray-300 mb-2">
+                        Preferred Schedule
+                      </label>
                       <select
                         className="w-full bg-gray-800/50 border border-gray-600 text-white rounded-lg px-3 py-2 focus:border-green-500 focus:outline-none"
                         value={formData.schedulePreference}
-                        onChange={(e) => handleInputChange("schedulePreference", e.target.value)}
+                        onChange={(e) =>
+                          handleInputChange(
+                            "schedulePreference",
+                            e.target.value
+                          )
+                        }
                       >
                         <option value="">Select your preferred schedule</option>
                         <option value="weekdays">Weekdays (9 AM - 5 PM)</option>
                         <option value="evenings">Evenings (6 PM - 9 PM)</option>
-                        <option value="weekends">Weekends (10 AM - 4 PM)</option>
+                        <option value="weekends">
+                          Weekends (10 AM - 4 PM)
+                        </option>
                         <option value="flexible">Flexible</option>
                       </select>
                     </div>
@@ -1202,7 +1376,9 @@ export default function CloudsDewLanding() {
                       placeholder="Tell us about your career goals and what you hope to achieve..."
                       rows={4}
                       value={formData.goalsExpectations}
-                      onChange={(e) => handleInputChange("goalsExpectations", e.target.value)}
+                      onChange={(e) =>
+                        handleInputChange("goalsExpectations", e.target.value)
+                      }
                       className="bg-gray-800/50 border-gray-600 text-white placeholder-gray-400 focus:border-green-500"
                     />
                   </div>
@@ -1212,17 +1388,25 @@ export default function CloudsDewLanding() {
                       type="checkbox"
                       id="terms"
                       checked={formData.termsAccepted}
-                      onChange={(e) => handleInputChange("termsAccepted", e.target.checked)}
+                      onChange={(e) =>
+                        handleInputChange("termsAccepted", e.target.checked)
+                      }
                       className="w-4 h-4 text-green-500 bg-gray-800 border-gray-600 rounded focus:ring-green-500"
                       required
                     />
                     <label htmlFor="terms" className="text-sm text-gray-300">
                       I agree to the{" "}
-                      <a href="#" className="text-green-400 hover:text-green-300">
+                      <a
+                        href="#"
+                        className="text-green-400 hover:text-green-300"
+                      >
                         Terms & Conditions
                       </a>{" "}
                       and{" "}
-                      <a href="#" className="text-green-400 hover:text-green-300">
+                      <a
+                        href="#"
+                        className="text-green-400 hover:text-green-300"
+                      >
                         Privacy Policy
                       </a>
                     </label>
@@ -1246,7 +1430,10 @@ export default function CloudsDewLanding() {
                     ) : (
                       <>
                         <Send className="mr-2" size={20} />
-                        Register for {selectedProgram === "mentorship" ? "Mentorship" : "Bootcamp"}
+                        Register for{" "}
+                        {selectedProgram === "mentorship"
+                          ? "Mentorship"
+                          : "Bootcamp"}
                       </>
                     )}
                   </Button>
@@ -1262,10 +1449,17 @@ export default function CloudsDewLanding() {
             <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
               {/* Company Info */}
               <div className="lg:col-span-2 space-y-6">
-                <Image src="/cloudsdew-logo.png" alt="CloudsDew Tech" width={200} height={60} className="h-14 w-auto" />
+                <Image
+                  src="/cloudsdew-logo.png"
+                  alt="CloudsDew Tech"
+                  width={200}
+                  height={60}
+                  className="h-14 w-auto"
+                />
                 <p className="text-gray-300 leading-relaxed max-w-md">
-                  Transforming careers through expert training in MultiCloud, DevOps, and AI technologies. Join
-                  thousands who've accelerated their growth with CloudsDew Tech's premium programs.
+                  Transform your career with expert training in MultiCloud,
+                  DevOps, and AI technologies. Be among the first to accelerate
+                  your growth with CloudsDew Tech’s premium programs.
                 </p>
                 <div className="flex space-x-4">
                   <Button
@@ -1287,7 +1481,9 @@ export default function CloudsDewLanding() {
               <div>
                 <div className="flex items-center space-x-2 mb-6">
                   <Star className="w-5 h-5 text-green-400" />
-                  <h4 className="text-lg font-semibold text-white">Quick Links</h4>
+                  <h4 className="text-lg font-semibold text-white">
+                    Quick Links
+                  </h4>
                 </div>
                 <div className="space-y-3">
                   <button
@@ -1328,19 +1524,25 @@ export default function CloudsDewLanding() {
                     <div className="w-8 h-8 bg-green-500/20 rounded-lg flex items-center justify-center">
                       <Mail className="w-4 h-4 text-green-400" />
                     </div>
-                    <span className="text-gray-300 text-sm">cloudsdewai@gmail.com</span>
+                    <span className="text-gray-300 text-sm">
+                      cloudsdewai@gmail.com
+                    </span>
                   </div>
                   <div className="flex items-center space-x-3">
                     <div className="w-8 h-8 bg-blue-500/20 rounded-lg flex items-center justify-center">
                       <Phone className="w-4 h-4 text-blue-400" />
                     </div>
-                    <span className="text-gray-300 text-sm">+2349133237953</span>
+                    <span className="text-gray-300 text-sm">
+                      +2349133237953
+                    </span>
                   </div>
                   <div className="flex items-center space-x-3">
                     <div className="w-8 h-8 bg-purple-500/20 rounded-lg flex items-center justify-center">
                       <MapPin className="w-4 h-4 text-purple-400" />
                     </div>
-                    <span className="text-gray-300 text-sm">5 Ire-Akari Street, Magbon Lagos State</span>
+                    <span className="text-gray-300 text-sm">
+                      5 Ire-Akari Street, Magbon Lagos State
+                    </span>
                   </div>
                 </div>
               </div>
@@ -1351,11 +1553,16 @@ export default function CloudsDewLanding() {
               <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
                 <div className="flex items-center space-x-2 text-gray-400 text-sm">
                   <Star className="w-4 h-4 text-green-400" />
-                  <span>© 2024 CloudsDew Tech. All rights reserved. | Transforming careers through innovation.</span>
+                  <span>
+                    © 2025 CloudsDew Tech. All rights reserved. | Transforming
+                    careers through innovation.
+                  </span>
                   <Star className="w-4 h-4 text-green-400" />
                 </div>
                 <div className="text-center">
-                  <p className="text-green-400 font-medium text-sm">Building the Future, One Professional at a Time</p>
+                  <p className="text-green-400 font-medium text-sm">
+                    Making Impact, One Professional at a Time
+                  </p>
                 </div>
               </div>
             </div>
@@ -1364,5 +1571,5 @@ export default function CloudsDewLanding() {
         <Toaster />
       </div>
     </div>
-  )
+  );
 }
